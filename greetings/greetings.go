@@ -17,7 +17,10 @@ func Hello(nama string) (string, error){
 	//kalo ada namanya masuk ke message
 	//di greeting message
 	//message := fmt.Sprintf("Asalamualaikum, %v. selamat datang", nama)
-	message := fmt.Sprintf(randomFormat(), nama)
+	//message := fmt.Sprintf(randomFormat(), nama)
+
+	//untuk ujicoba tes
+	message := fmt.Sprintf(randomFormat())
 	return message, nil
 }
 
