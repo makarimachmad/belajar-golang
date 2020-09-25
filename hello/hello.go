@@ -12,8 +12,11 @@ func main() {
 	// log menandai untuk mencegah keluaran print
 	// waktu, file, dan nomor baris
 	
+	// potongan beberapa nama
+	namas := []string{"achmad", "makarim", "widyanto"}
+
 	// Get a greeting message and print it.
-	message, err := greetings.Hello("Makarim")
+	message, err := greetings.Hellos(namas)
 
 	// untuk mengembalikan nilai jika error
 	// dan akan keluar
