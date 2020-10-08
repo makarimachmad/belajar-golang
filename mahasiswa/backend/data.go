@@ -1,12 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
+
+// func setupResponse(w *http.ResponseWriter, req *http.Request) {
+// 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+// 	(*w).Header().Set("Content-Type", "application/json; charset=UTF-8")
+//     (*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+//     (*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+// }
 
 func getBiodata(w http.ResponseWriter, r *http.Request) {
 	var biodata Biodata
@@ -40,59 +48,80 @@ func getBiodata(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(response)
-
 }
-
 func insertBiodata(w http.ResponseWriter, r *http.Request) {
-	//var biodata Biodata
-	var arr_biodata []Biodata
-	var response Response
-	
-	db := connect()
-	defer db.Close()
+    // Declare a new Person struct.
+    var p Biodata
 
-	// pake form-data
-	err := r.ParseMultipartForm(4096)
-	if err != nil {
-		panic(err)
-	}
+    // Try to decode the request body into the struct. If there is an error,
+    // respond to the client with the error message and a 400 status code.
+    err := json.NewDecoder(r.Body).Decode(&p)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
 
-	nama := r.FormValue("nama")
-	nim := r.FormValue("nim")
-	email := r.FormValue("email")
-	
-	// pake x-www-form-urlencoded
-	// err := r.ParseForm()
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// nama := r.Form.Get("nama")
-  	// nim := r.Form.Get("nim")
-	// email := r.Form.Get("email")
-
-	_, err = db.Exec("INSERT INTO biodata (nama, nim, email) values (?, ?, ?)",
-		nama,
-		nim,
-		email,
-	)
-  
-	if err != nil {
-		log.Print(err)
-	}
-  
-	response.Status = 200
-	response.Message = "Berhasil Insert"
-	response.Data = arr_biodata
-		
-	log.Print("Insert data to database")
-  
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	json.NewEncoder(w).Encode(response)
-  
+    // Do something with the Person struct...
+    fmt.Fprintf(w, "Person: %+v", p)
 }
+// func insertBiodata(w http.ResponseWriter, r *http.Request) {
+// 	//var biodata Biodata
+// 	var arr_biodata []Biodata
+// 	var response Response
+	
+// 	db := connect()
+// 	defer db.Close()
+
+// 	// pake form-data
+// 	err := r.ParseMultipartForm(4096)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	nama := r.FormValue("nama")
+// 	nim := r.FormValue("nim")
+// 	email := r.FormValue("email")
+	
+	
+	
+// 	// pake x-www-form-urlencoded
+// 	// err := r.ParseForm()
+// 	// if err != nil {
+// 	// 	panic(err)
+// 	// }
+// 	// nama := r.Form.Get("nama")
+//   	// nim := r.Form.Get("nim")
+// 	// email := r.Form.Get("email")
+
+// 	_, err = db.Exec("INSERT INTO biodata (nama, nim, email) values (?, ?, ?)",
+// 		nama,
+// 		nim,
+// 		email,
+// 	)
+  
+// 	if err != nil {
+// 		log.Print(err)
+// 		response.Status = 400
+// 		response.Message = "gak ada datanya"
+// 		response.Data = arr_biodata
+// 	}else{
+// 		response.Status = 200
+// 		response.Message = "Berhasil Insert"
+// 		response.Data = arr_biodata
+// 	}
+  
+// 	log.Print("Insert data to database")
+  
+// 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+// 	// w.Header().Set("Access-Control-Allow-Origin", "*")
+// 	// setupResponse(&w, r)
+// 	// if (*r).Method == "OPTIONS" {
+// 	// 	return
+// 	// }
+// 	json.NewEncoder(w).Encode(response)
+  
+// }
 
 func updateBiodata(w http.ResponseWriter, r *http.Request) {
 	//var biodata Biodata
@@ -197,14 +226,12 @@ func deleteBiodata(w http.ResponseWriter, r *http.Request) {
 	response.Status = 200
 	response.Message = "Berhasil Hapus"
 
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "*")
 	log.Print(w, "biodata dengan id = %s telah terhapus", params["id"])
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	json.NewEncoder(w).Encode(response)
   }
 
-func detailBiodata(w http.ResponseWriter, r *http.Request){
+func detailBiodata(w http.ResponseWriter, r *http.Request) {
 	var biodata Biodata
 	var arr_biodata []Biodata
 	var response Response
@@ -246,7 +273,6 @@ func detailBiodata(w http.ResponseWriter, r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
-
 }
 
 func getSingleBiodata(w http.ResponseWriter, r *http.Request) {

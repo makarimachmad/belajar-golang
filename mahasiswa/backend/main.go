@@ -2,25 +2,32 @@ package main
 
 import (
 	"fmt"
-	"log"
+	//"log"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/handlers"
 )
 func HandleRequest(){
-	RouterSaya := mux.NewRouter().StrictSlash(true)
-	RouterSaya.HandleFunc("/biodata", getBiodata).Methods("GET")
-	RouterSaya.HandleFunc("/tambah", insertBiodata).Methods("POST")
-	RouterSaya.HandleFunc("/lihat", detailBiodata).Methods("GET")
-	RouterSaya.HandleFunc("/detail/{id}", getSingleBiodata).Methods("GET")
-	RouterSaya.HandleFunc("/update", updateBiodata).Methods("PUT")
-	RouterSaya.HandleFunc("/update", updateBiodata).Methods("PATCH")
-	RouterSaya.HandleFunc("/hapus/{id}", deleteBiodata).Methods("DELETE")
+	router := mux.NewRouter()
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "application/json; charset=UTF-8"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"})
+	origins := handlers.AllowedOrigins([]string{"*"})
 
-	http.Handle("/", RouterSaya)
+
+	router.HandleFunc("/biodata", getBiodata).Methods("GET")
+	router.HandleFunc("/tambah", insertBiodata).Methods("POST")
+	router.HandleFunc("/lihat", detailBiodata).Methods("GET")
+	router.HandleFunc("/detail/{id}", getSingleBiodata).Methods("GET")
+	router.HandleFunc("/update", updateBiodata).Methods("PUT")
+	router.HandleFunc("/update", updateBiodata).Methods("PATCH")
+	router.HandleFunc("/hapus/{id}", deleteBiodata).Methods("DELETE")
+
+	//http.HandleFunc("/", handler)
 	fmt.Println("Connected to port 8090")
-	log.Fatal(http.ListenAndServe(":8090", RouterSaya))
+	//log.Fatal(http.ListenAndServe(":8090", nil))
+	http.ListenAndServe(":8090", handlers.CORS(headers, methods, origins)(router))
 
 }
 func main() {

@@ -1,3 +1,4 @@
+
 import Vue from 'vue'
 import App from './App.vue'
 
@@ -8,14 +9,14 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 import Detail from './components/Detail.vue'
-import User from './components/User.vue'
-import Post from './components/Posts.vue'
+import Biodata from './components/Biodata.vue'
+import Posts from './components/Posts.vue'
 
 const router = new VueRouter({
   routes :[{
       path: '/',
       name: 'biodata',
-      component: User
+      component: Biodata
     },
     {
       path: '/detail/:id',
@@ -25,7 +26,7 @@ const router = new VueRouter({
     {
       path: '/zulfiqor',
       name: 'zulfiqor',
-      component: Post
+      component: Posts
     }
   ],
   mode: 'history'
