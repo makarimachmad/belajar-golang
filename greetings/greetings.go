@@ -52,8 +52,6 @@ func randomFormat() string{
 		"Bagus, senang melihat kamu, %v",
 		"halo, %v senang bertemu",
 	}
-
-
 	//mengembalikan greeting message
 	return formats[rand.Intn(len(formats))]
 }

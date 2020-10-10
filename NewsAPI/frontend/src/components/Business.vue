@@ -1,0 +1,169 @@
+<template>
+  <v-sheet
+    class="mx-auto"
+    elevation="10"
+    max-width="1200"
+  >
+    <v-card-text>
+      <h2 style="color:green; font-weight: bold; font-size:200%;">| Business</h2>
+    </v-card-text>
+    
+    <v-slide-group
+      v-model="model"
+      class="pa-4"
+      show-arrows
+    >
+    
+      <v-slide-item
+        v-for="data in artikels.articles" :key="data.id"
+        v-slot:default="{ active, toggle, overlay }"
+      >
+        <v-card
+          :color="active ? undefined : 'grey lighten-4'"
+          class="ma-4"
+          height="300"
+          width="300"
+          @click="toggle"
+        >
+         <v-img
+            :aspect-ratio="16/9"
+            :src="data.urlToImage"
+          >
+            <!-- <v-expand-transition>
+              <div
+                v-if="hover"
+                class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-3 white--text"
+                style="height: 100%;"
+              >
+                $14.99
+              </div>
+            </v-expand-transition> -->
+          </v-img>
+          <v-card-text
+            class="pt-6"
+            style="position: relative;"
+          >
+            <v-btn
+              absolute
+              color="green"
+              class="white--text"
+              fab
+              large
+              right
+              top
+            >
+              <v-icon>mdi-heart</v-icon>
+            </v-btn>
+            
+            <div class="font-weight-light green--text" v-text="data.title" size="5"></div>
+            <div class="display-0.75 font-weight-light grey--text mb-2" v-text="data.author" size="3"></div>
+            <!-- <div class="font-weight-light title mb-2">
+              Our Vintage kitchen utensils delight any chef.<br>
+              Made of bamboo by hand
+            </div> -->
+          </v-card-text>
+          <v-overlay
+              v-if="active"
+              :absolute="absolute"
+              :value="overlay"
+              :sementara="data"
+          >
+              
+                <router-link :to="{ name: 'detail'}">
+                  <v-btn
+                    v-if="active"
+                    color="green lighten-2"
+                    @click="overlay = false, sementara(data)"
+                  >
+                  Selengkapnya
+                  </v-btn>
+                </router-link>
+                
+              
+          </v-overlay>
+        </v-card>
+      </v-slide-item>
+    </v-slide-group>
+  </v-sheet>
+</template>
+<script>
+  import axios from 'axios'
+  export default {
+    data: () => ({
+      model: null,
+      absolute: true,
+      // opacity: 1,
+      // zIndex: 0,
+      overlay: false,
+      artikels: [],
+      tampung: {
+        id: 1,
+        sourceid: '',
+        sourcename: '',
+        author: '',
+        title: '',
+        deskripsi: '',
+        url: '',
+        urlgambar: '',
+        waktu: '',
+        konten: '',
+      }
+    }),
+    mounted(){
+      this.load()
+    },
+    methods: {
+      load(){
+        axios.get('https://newsapi.org/v2/top-headlines?apikey=6bc3cbc8dcf3473fb2527028734aedee&country=id&category=business')
+        .then(res => {
+          this.artikels = res.data
+          console.log(this.artikels)
+        }).catch( err=> {
+          console.log(err)
+        })
+      },
+      sementara(data){
+        console.log(data)
+        this.tampung.sourceid = data.source.id,
+        this.tampung.sourcename = data.source.name,
+        this.tampung.title = data.title,
+        this.tampung.url = data.url,
+        this.tampung.urlgambar = data.urlToImage,
+        this.tampung.deskripsi = data.description
+        this.tampung.author = data.author,
+        this.tampung.waktu = data.publishedAt,
+        this.tampung.konten = data.content
+        console.log(this.tampung)
+
+        return axios.put('http://localhost:3000/articles/' + this.tampung.id , 
+        { sourceid: this.tampung.sourcid,
+          sourcename: this.tampung.sourcename,
+          title: this.tampung.title,
+          url: this.tampung.url,
+          urlToImage: this.tampung.urlgambar,
+          description: this.tampung.deskripsi,
+          author: this.tampung.author,
+          publishedAt: this.tampung.waktu,
+          content: this.tampung.konten
+        })
+        .then(res => {
+          console.log(res.data)
+        }).catch((err) => {
+          console.log(err);
+        })
+      },
+      // update(tampung){
+      //   return axios.put('http://localhost:3000/users/' + form.id , {name: this.form.name})
+      //   .then(res => {
+      //     this.form.id = ''
+      //     this.form.name = ''
+      //     this.updateSubmit = false
+      //     console.log(res)
+      //   }).catch((err) => {
+      //     console.log(err);
+          
+      //   })
+      // },
+    },
+  }
+</script>

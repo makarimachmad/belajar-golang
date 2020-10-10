@@ -11,7 +11,7 @@
     <ul v-for="user in users" :key="user.id">
       <li>
         <span>{{user.nama}}</span> &#160;
-        <button @click="edit(user)">Edit</button> ||  <router-link :to="'/detail/'+user.id">Detail</router-link> || <button @click.prevent="del(user)">Delete</button>
+        <button @click="edit(user)">Edit</button> ||  <router-link :to="'/detail/'+user.id">Detail</router-link> || <button @click.prevent="del(user.id)">Delete</button>
       </li>
     </ul>
   </div>
@@ -37,9 +37,9 @@ export default {
   },
   methods: {
     load(){
-        axios.get('http://localhost:8090/biodata')
+        axios.get('http://localhost:8090')
         .then(res => {
-          this.users = res.data.Data //respon dari rest api dimasukan ke users
+          this.users = res.data //respon dari rest api dimasukan ke users
           console.log(res.data)
         }).catch ((err) => {
           console.log(err)
@@ -47,18 +47,28 @@ export default {
     },
     add(){
         console.log(this.form)
-        axios.post('http://localhost:8090/tambah', this.form)
+        axios.post('http://localhost:8090/tambah', {
+          nama: this.form.nama, 
+          nim: this.form.nim, 
+          email: this.form.email
+        },{
+          headers:{
+            'Content-Type':'application/json'
+          }
+        })
         .then(res => {
-          
           this.load()
           console.log(res.data)
-        
-        }).catch(error => {
-          console.log("gagal")
+          this.form.nim=""
+          this.form.nama=""
+          this.form.email=""
+        })
+        .catch(error => {
+          console.log(error.response)
         })
     },
     del(user){
-      axios.delete('http://localhost:8090/hapus/' + user.id)
+      axios.delete('http://localhost:8090/hapus?id=' + user)
       .then(res =>{
           this.load()
           let index = this.users.indexOf(form.nama)
@@ -76,16 +86,24 @@ export default {
         this.form.email = user.email 
     },
     update(form){
-        return axios.put('http://localhost:8090/update', {nama: this.form.nama, nim: this.form.nim, email: this.form.email})
+      return axios.put('http://localhost:8090/update', {
+          id: parseInt(this.form.id),
+          nama: this.form.nama, 
+          nim: this.form.nim, 
+          email: this.form.email
+        },{
+          headers:{
+            'Content-Type':'application/json'
+          }
+        })
         .then(res => {
-        this.load()
-        this.form.id = ''
-        nama : this.form.nama
-        nim : this.form.nim
-        email : this.form.email
-        this.updateSubmit = false
-      }).catch((err) => {
-        console.log(err)
+          this.load()
+          console.log(res.data)
+          this.form.nim=""
+          this.form.nama=""
+          this.form.email=""
+        }).catch((err) => {
+          console.log(err)
       })
     },
   }
