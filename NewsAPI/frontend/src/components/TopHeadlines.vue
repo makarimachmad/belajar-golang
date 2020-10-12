@@ -58,10 +58,10 @@ import axios from 'axios'
         load(){
             axios.get('https://newsapi.org/v2/top-headlines?apikey=6bc3cbc8dcf3473fb2527028734aedee&country=id')
             .then(res => {
-            this.artikels = res.data
-            console.log(this.artikels)
+              this.artikels = res.data
+              console.log(this.artikels)
             }).catch( err=> {
-            console.log(err)
+              console.log(err)
             })
         }
     }

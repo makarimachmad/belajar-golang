@@ -93,10 +93,11 @@
     data: () => ({
       model: null,
       absolute: true,
-      // opacity: 1,
-      // zIndex: 0,
       overlay: false,
       artikels: [],
+      tampung: {
+        id: 1,
+      }
     }),
     mounted(){
       this.load()
@@ -113,17 +114,17 @@
       },
       sementara(data){
         console.log(data)
-
-        return axios.put('http://localhost:3000/articles/' + this.data.id , 
-        { sourceid: this.data.sourceid,
-          sourcename: this.data.sourcename,
-          title: this.data.title,
-          url: this.data.url,
-          urlToImage: this.data.urlToImage,
-          description: this.data.description,
-          author: this.data.author,
-          publishedAt: this.data.publishedAt,
-          content: this.data.content
+        
+        return axios.put('http://localhost:3000/articles/' + this.tampung.id , 
+        { sourceid: data.source.id,
+          sourcename: data.source.name,
+          title: data.title,
+          url: data.url,
+          urlToImage: data.urlToImage,
+          description: data.description,
+          author: data.author,
+          publishedAt: data.publishedAt,
+          content: data.content
         })
         .then(res => {
           console.log(res.data)
@@ -131,6 +132,18 @@
           console.log(err);
         })
       },
+      // update(tampung){
+      //   return axios.put('http://localhost:3000/users/' + form.id , {name: this.form.name})
+      //   .then(res => {
+      //     this.form.id = ''
+      //     this.form.name = ''
+      //     this.updateSubmit = false
+      //     console.log(res)
+      //   }).catch((err) => {
+      //     console.log(err);
+          
+      //   })
+      // },
     },
   }
 </script>
