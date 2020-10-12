@@ -9,12 +9,12 @@ import (
 	"context"
 	"strconv"
 	"net/http"
-	"encoding/json"
-	_ "github.com/gorilla/mux"
-	_ "github.com/gorilla/handlers"
-	"SPENEWS/backend/controller"
-	"SPENEWS/backend/models"
-	"SPENEWS/backend/utils"
+	//"encoding/json"
+	"github.com/gorilla/mux"
+	"github.com/gorilla/handlers"
+	"belajar-golang/NewsAPI/backend/web/controller"
+	"belajar-golang/NewsAPI/backend/web/models"
+	"belajar-golang/NewsAPI/backend/web/utils"
 )
 
 func main() {
@@ -36,6 +36,7 @@ func handleRequest(){
 	origins := handlers.AllowedOrigins([]string{"*"})
 
     router.HandleFunc("/", getArticle).Methods("GET")
+    router.HandleFunc("/lihat", getSelectedArticle).Methods("GET")
 	
 	fmt.Println("Terhubung ke 8090")
 	http.ListenAndServe(":8090", handlers.CORS(headers, methods, origins)(router))
@@ -48,7 +49,7 @@ func getArticle(w http.ResponseWriter, r *http.Request) {
 		
         defer cancel()
 		
-        articles, err := articles.GetAll(ctx)
+        articles, err := article.GetAll(ctx)
  
         if err != nil {
             fmt.Println(err)
@@ -64,11 +65,21 @@ func getArticle(w http.ResponseWriter, r *http.Request) {
 
 func getSelectedArticle(w http.ResponseWriter, r *http.Request) {
     if r.Method == "GET" {
+ 
         ctx, cancel := context.WithCancel(context.Background())
-		
         defer cancel()
-		
-        articles, err := articles.GetSelected(ctx)
+ 
+        var art models.Article
+ 
+        id := r.URL.Query().Get("id")
+ 
+        if id == "" {
+            utils.ResponseJSON(w, "id tidak boleh kosong", http.StatusBadRequest)
+            return
+        }
+        art.Id, _ = strconv.Atoi(id)
+ 
+        articles, err := article.GetSelected(ctx, art)
  
         if err != nil {
             fmt.Println(err)
@@ -76,8 +87,9 @@ func getSelectedArticle(w http.ResponseWriter, r *http.Request) {
  
         utils.ResponseJSON(w, articles, http.StatusOK)
         return
+ 
     }
  
-    http.Error(w, "Tidak diijinkan", http.StatusNotFound)
+    http.Error(w, "Tidak di ijinkan", http.StatusMethodNotAllowed)
     return
 }

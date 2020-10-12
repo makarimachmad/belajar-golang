@@ -48,13 +48,13 @@ export default {
     }
   },
   created() {
-    this.det()
+    this.load()
   },
   methods: {
-    det(){
-      axios.get('http://localhost:3000/articles')
+    load(){
+      axios.get(`http://localhost:8090/lihat?id=${this.$route.params.id}`)
       .then(res =>{
-          console.log(res.data)
+          //console.log(res.data)
           this.berita = res.data //respon dari rest api dimasukan ke users
           console.log(this.berita)
         }).catch ((err) => {

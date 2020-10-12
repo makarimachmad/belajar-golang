@@ -1,14 +1,14 @@
-package mahasiswa
+package article
 
 import (
     "context"
     "fmt"
-    "SPENEWS/backend/config"
-    "SPENEWS/backend/models"
+    "belajar-golang/NewsAPI/backend/web/config"
+    "belajar-golang/NewsAPI/backend/web/models"
     "log"
-    "errors"
+    //"errors"
     "database/sql"
-    "strconv"
+    //"strconv"
 )
  
 const   table = "berita"
@@ -35,21 +35,27 @@ func GetAll(ctx context.Context) ([]models.Article, error) {
         var article models.Article
  
         if err = rowQuery.Scan(
-			&article.Id,
-            &article.Nama,
-            &article.Nim,
-			&article.Email);
+            &article.Id,
+            &article.SourceId,
+            &article.SourceName,
+            &article.Author,
+            &article.Title,
+            &article.Description,
+            &article.Url,
+            &article.UrlToImage,
+            &article.PublishedAt,
+            &article.Content);
 			err != nil && sql.ErrNoRows != nil{
             return nil, err
         } 
-        articles = append(mahasiswas, mahasiswa)
+        articles = append(articles, article)
     }
  
     return articles, nil
 }
 
 // get selected
-func GetSelected(ctx context.Context) ([]models.Article, error) {
+func GetSelected(ctx context.Context, art models.Article) ([]models.Article, error) {
  
     var articles []models.Article
  
@@ -59,7 +65,7 @@ func GetSelected(ctx context.Context) ([]models.Article, error) {
         log.Fatal("Gagal terhubung ke MySQL", err)
     }
  
-    queryText := fmt.Sprintf("SELECT * FROM %v", table)
+    queryText := fmt.Sprintf("SELECT * FROM %v WHERE id = '%d'", table, art.Id)
  
     rowQuery, err := db.QueryContext(ctx, queryText)
  
@@ -72,13 +78,19 @@ func GetSelected(ctx context.Context) ([]models.Article, error) {
  
         if err = rowQuery.Scan(
 			&article.Id,
-            &article.Nama,
-            &article.Nim,
-			&article.Email);
+            &article.SourceId,
+            &article.SourceName,
+            &article.Title,
+            &article.Author,
+            &article.Description,
+            &article.Url,
+            &article.UrlToImage,
+            &article.PublishedAt,
+            &article.Content);
 			err != nil && sql.ErrNoRows != nil{
             return nil, err
         } 
-        articles = append(mahasiswas, mahasiswa)
+        articles = append(articles, article)
     }
  
     return articles, nil

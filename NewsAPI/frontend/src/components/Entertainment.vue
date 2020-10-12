@@ -70,7 +70,7 @@
               :sementara="data"
           >
               
-                <router-link :to="{ name: 'detail'}">
+                <router-link :to="{ name: 'detailnya'}">
                   <v-btn
                     v-if="active"
                     color="orange lighten-2"
@@ -97,18 +97,6 @@
       // zIndex: 0,
       overlay: false,
       artikels: [],
-      tampung: {
-        id: 1,
-        sourceid: '',
-        sourcename: '',
-        author: '',
-        title: '',
-        deskripsi: '',
-        url: '',
-        urlgambar: '',
-        waktu: '',
-        konten: '',
-      }
     }),
     mounted(){
       this.load()
@@ -125,27 +113,17 @@
       },
       sementara(data){
         console.log(data)
-        this.tampung.sourceid = data.source.id,
-        this.tampung.sourcename = data.source.name,
-        this.tampung.title = data.title,
-        this.tampung.url = data.url,
-        this.tampung.urlgambar = data.urlToImage,
-        this.tampung.deskripsi = data.description
-        this.tampung.author = data.author,
-        this.tampung.waktu = data.publishedAt,
-        this.tampung.konten = data.content
-        console.log(this.tampung)
 
-        return axios.put('http://localhost:3000/articles/' + this.tampung.id , 
-        { sourceid: this.tampung.sourcid,
-          sourcename: this.tampung.sourcename,
-          title: this.tampung.title,
-          url: this.tampung.url,
-          urlToImage: this.tampung.urlgambar,
-          description: this.tampung.deskripsi,
-          author: this.tampung.author,
-          publishedAt: this.tampung.waktu,
-          content: this.tampung.konten
+        return axios.put('http://localhost:3000/articles/' + this.data.id , 
+        { sourceid: this.data.sourceid,
+          sourcename: this.data.sourcename,
+          title: this.data.title,
+          url: this.data.url,
+          urlToImage: this.data.urlToImage,
+          description: this.data.description,
+          author: this.data.author,
+          publishedAt: this.data.publishedAt,
+          content: this.data.content
         })
         .then(res => {
           console.log(res.data)
@@ -153,18 +131,6 @@
           console.log(err);
         })
       },
-      // update(tampung){
-      //   return axios.put('http://localhost:3000/users/' + form.id , {name: this.form.name})
-      //   .then(res => {
-      //     this.form.id = ''
-      //     this.form.name = ''
-      //     this.updateSubmit = false
-      //     console.log(res)
-      //   }).catch((err) => {
-      //     console.log(err);
-          
-      //   })
-      // },
     },
   }
 </script>

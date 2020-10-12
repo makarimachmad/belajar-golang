@@ -15,7 +15,7 @@
     >
     
       <v-slide-item
-        v-for="data in artikels.articles" :key="data.id"
+        v-for="data in artikels" :key="data.id"
         v-slot:default="{ active, toggle, overlay }"
       >
         <v-card
@@ -67,13 +67,13 @@
               :absolute="absolute"
               :value="overlay"
               :sementara="data"
-          >
               
-                <router-link :to="{ name: 'detail'}">
+          >
+                <router-link :to="'/detail/'+data.id">
                   <v-btn
                     v-if="active"
                     color="green lighten-2"
-                    @click="overlay = false, sementara(data)"
+                    @click="overlay = false"
                   >
                   Selengkapnya
                   </v-btn>
@@ -89,32 +89,20 @@
 <script>
   import axios from 'axios'
   export default {
-    data: () => ({
-      model: null,
-      absolute: true,
-      // opacity: 1,
-      // zIndex: 0,
-      overlay: false,
-      artikels: [],
-      tampung: {
-        id: 1,
-        sourceid: '',
-        sourcename: '',
-        author: '',
-        title: '',
-        deskripsi: '',
-        url: '',
-        urlgambar: '',
-        waktu: '',
-        konten: '',
+    data(){
+      return{
+        model: null,
+        absolute: true,
+        overlay: false,
+        artikels: [],
       }
-    }),
+    },
     mounted(){
       this.load()
     },
     methods: {
       load(){
-        axios.get('https://newsapi.org/v2/top-headlines?apikey=6bc3cbc8dcf3473fb2527028734aedee&country=id&category=business')
+        axios.get('http://localhost:8090')
         .then(res => {
           this.artikels = res.data
           console.log(this.artikels)
@@ -122,48 +110,6 @@
           console.log(err)
         })
       },
-      sementara(data){
-        console.log(data)
-        this.tampung.sourceid = data.source.id,
-        this.tampung.sourcename = data.source.name,
-        this.tampung.title = data.title,
-        this.tampung.url = data.url,
-        this.tampung.urlgambar = data.urlToImage,
-        this.tampung.deskripsi = data.description
-        this.tampung.author = data.author,
-        this.tampung.waktu = data.publishedAt,
-        this.tampung.konten = data.content
-        console.log(this.tampung)
-
-        return axios.put('http://localhost:3000/articles/' + this.tampung.id , 
-        { sourceid: this.tampung.sourcid,
-          sourcename: this.tampung.sourcename,
-          title: this.tampung.title,
-          url: this.tampung.url,
-          urlToImage: this.tampung.urlgambar,
-          description: this.tampung.deskripsi,
-          author: this.tampung.author,
-          publishedAt: this.tampung.waktu,
-          content: this.tampung.konten
-        })
-        .then(res => {
-          console.log(res.data)
-        }).catch((err) => {
-          console.log(err);
-        })
-      },
-      // update(tampung){
-      //   return axios.put('http://localhost:3000/users/' + form.id , {name: this.form.name})
-      //   .then(res => {
-      //     this.form.id = ''
-      //     this.form.name = ''
-      //     this.updateSubmit = false
-      //     console.log(res)
-      //   }).catch((err) => {
-      //     console.log(err);
-          
-      //   })
-      // },
     },
   }
 </script>

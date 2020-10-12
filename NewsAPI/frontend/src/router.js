@@ -1,14 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-// import HelloWorld from './components/HelloWorld';
-// import Hover from './components/Hover.vue'
+
 import Beranda from './components/Beranda.vue'
-// import Health from './components/Health.vue'
-// import Business from './components/Business.vue'
-// import Entertainment from './components/Entertainment.vue'
 import Detail from './components/Detail.vue'
-//import Footer from './components/Footer.vue'
+import Detailnya from './components/Detailnya.vue'
+
 
 Vue.use(Router)
 
@@ -20,25 +17,15 @@ export default new Router ({
             name: 'beranda',
             component: Beranda
         },
-        // {
-        //     path: '/health',
-        //     name: 'health',
-        //     component: Health
-        // },
-        // {
-        //     path: '/business',
-        //     name: 'business',
-        //     component: Business
-        // },
-        // {
-        //     path: '/entertainment',
-        //     name: 'entertainment',
-        //     component: Entertainment
-        // },
         {
-            path: '/detail',
+            path: '/detail/:id',
             name: 'detail',
             component: Detail
+        },
+        {
+            path: '/detailnya',
+            name: 'detailnya',
+            component: Detailnya
         },
     ]
 })
