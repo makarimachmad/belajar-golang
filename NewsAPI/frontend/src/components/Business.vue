@@ -12,8 +12,7 @@
       v-model="model"
       class="pa-4"
       show-arrows
-    >
-    
+    >  
       <v-slide-item
         v-for="data in artikels" :key="data.id"
         v-slot:default="{ active, toggle, overlay }"
@@ -67,7 +66,6 @@
               :absolute="absolute"
               :value="overlay"
               :sementara="data"
-              
           >
                 <router-link :to="'/detail/'+data.id">
                   <v-btn
@@ -78,8 +76,7 @@
                   Selengkapnya
                   </v-btn>
                 </router-link>
-                
-              
+                 
           </v-overlay>
         </v-card>
       </v-slide-item>

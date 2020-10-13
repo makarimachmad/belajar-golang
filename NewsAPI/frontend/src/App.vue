@@ -3,7 +3,6 @@
     <v-app-bar
       app
       color="light-grey"
-      
     >
       <div class="d-flex align-center">
         <v-img
@@ -15,7 +14,6 @@
           width="80"
         />
         News
-
       </div>
 
       <v-spacer></v-spacer>

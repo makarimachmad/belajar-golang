@@ -15,9 +15,7 @@
           </v-row>
           <v-card-title ></v-card-title>
         </v-img>
-
-
-
+        
         <v-card-text class="text--primary">
           <div class="pb-0 green--text" v-text="data.sourcename"></div>
           <div class="pb-0 grey--text" v-text="data.author"></div>

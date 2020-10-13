@@ -1,7 +1,7 @@
 package models
 
 type Article struct {
-	Id 			int	`json:"id"`
+	Id 			int		`json:"id"`
 	SourceId	string 	`json:"sourceid"`
 	SourceName 	string	`json:"sourcename"`
 	Author		string	`json:"author"`

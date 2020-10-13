@@ -63,13 +63,13 @@
               Made of bamboo by hand
             </div> -->
           </v-card-text>
+
           <v-overlay
               v-if="active"
               :absolute="absolute"
               :value="overlay"
               :sementara="data"
           >
-              
                 <router-link :to="{ name: 'detailnya'}">
                   <v-btn
                     v-if="active"
@@ -79,8 +79,7 @@
                   Selengkapnya
                   </v-btn>
                 </router-link>
-                
-              
+       
           </v-overlay>
         </v-card>
       </v-slide-item>

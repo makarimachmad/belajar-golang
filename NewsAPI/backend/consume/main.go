@@ -74,12 +74,17 @@ func Insert(responseObjek models.Response) {
 		publishedAt := responseObjek.Data[i].PublishedAt
 		content := responseObjek.Data[i].Content
 
-		insForm, err := db.Prepare("INSERT INTO berita(sourceid, sourcename, author, title, description, url, UrlToImage, publishedAt, content) VALUES(?,?,?,?,?,?,?,?,?)")
-		
-    	if err != nil {
-        	panic(err.Error())
-    	}
-    	insForm.Exec(sourceid, sourcename, author, title, description, url, UrlToImage, publishedAt, content)
+		var exists bool
+		row := db.QueryRow("SELECT EXISTS(SELECT title FROM berita WHERE title = ?)", title)
+		if err := row.Scan(&exists); err != nil {
+			panic(err.Error())
+		} else if !exists {
+			insForm, err := db.Prepare("INSERT INTO berita(sourceid, sourcename, author, title, description, url, UrlToImage, publishedAt, content) VALUES(?,?,?,?,?,?,?,?,?)")
+			if err != nil {
+				panic(err.Error())
+			}
+			insForm.Exec(sourceid, sourcename, author, title, description, url, UrlToImage, publishedAt, content)
+		}
 	}
     defer db.Close()
 }

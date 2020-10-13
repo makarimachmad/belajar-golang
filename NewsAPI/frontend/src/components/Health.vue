@@ -63,13 +63,14 @@
               Made of bamboo by hand
             </div> -->
           </v-card-text>
+          
           <v-overlay
               v-if="active"
               :absolute="absolute"
               :value="overlay"
               :sementara="data"
           >
-              
+      
                 <router-link :to="{ name: 'detailnya'}">
                   <v-btn
                     v-if="active"
@@ -80,7 +81,6 @@
                   </v-btn>
                 </router-link>
                 
-              
           </v-overlay>
         </v-card>
       </v-slide-item>
@@ -132,18 +132,6 @@
           console.log(err);
         })
       },
-      // update(tampung){
-      //   return axios.put('http://localhost:3000/users/' + form.id , {name: this.form.name})
-      //   .then(res => {
-      //     this.form.id = ''
-      //     this.form.name = ''
-      //     this.updateSubmit = false
-      //     console.log(res)
-      //   }).catch((err) => {
-      //     console.log(err);
-          
-      //   })
-      // },
     },
   }
 </script>
