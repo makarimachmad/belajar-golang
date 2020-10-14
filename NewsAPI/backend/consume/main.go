@@ -50,6 +50,7 @@ func main(){
 }
 
 func dbConn() (db *sql.DB) {
+
     dbDriver := "mysql"
     dbUser := "root"
     dbPass := ""
@@ -62,6 +63,7 @@ func dbConn() (db *sql.DB) {
 	
 }
 func Insert(responseObjek models.Response) {
+	
     db := dbConn()
 	for i := 0; i<len(responseObjek.Data); i++{
 		sourceid := responseObjek.Data[i].Source.Id
@@ -74,10 +76,15 @@ func Insert(responseObjek models.Response) {
 		publishedAt := responseObjek.Data[i].PublishedAt
 		content := responseObjek.Data[i].Content
 
+		// variabel bantu untuk
 		var exists bool
+		// baca semua data title dan sambil dibandingkan 
 		row := db.QueryRow("SELECT EXISTS(SELECT title FROM berita WHERE title = ?)", title)
+		// jika sudah ada dan error maka seperti ini
 		if err := row.Scan(&exists); err != nil {
 			panic(err.Error())
+		
+		// jika tidak ada maka seperti ini
 		} else if !exists {
 			insForm, err := db.Prepare("INSERT INTO berita(sourceid, sourcename, author, title, description, url, UrlToImage, publishedAt, content) VALUES(?,?,?,?,?,?,?,?,?)")
 			if err != nil {
