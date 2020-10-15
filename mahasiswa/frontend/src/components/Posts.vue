@@ -42,7 +42,7 @@ export default {
     },
      add(){
        console.log(this.form)
-      axios.post('http://localhost:3000/users/', this.form).then(res => {
+        axios.post('http://localhost:3000/users/', this.form).then(res => {
           this.load()
           this.form.name = ''
       })
