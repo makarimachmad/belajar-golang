@@ -12,9 +12,9 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/handlers"
-	"belajar-golang/mahasiswa/backend/kodingincom/restapi/controller"
-	"belajar-golang/mahasiswa/backend/kodingincom/restapi/models"
-	"belajar-golang/mahasiswa/backend/kodingincom/restapi/utils"
+	"belajar-golang/mahasiswa/backend/controller"
+	"belajar-golang/mahasiswa/backend/models"
+	"belajar-golang/mahasiswa/backend/utils"
 )
 
 func main() {
@@ -48,9 +48,10 @@ func handleRequest(){
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "application/json; charset=UTF-8"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"})
 	origins := handlers.AllowedOrigins([]string{"*"})
-
+    
 
     router.HandleFunc("/", getMahasiswa).Methods("GET")
+    router.HandleFunc("/detail", getSelectedMahasiswa).Methods("GET")
 	router.HandleFunc("/tambah", tambahMahasiswa).Methods("POST")
 	router.HandleFunc("/update", updateMahasiswa).Methods("PUT")
 	router.HandleFunc("/update", updateMahasiswa).Methods("PATCH")
@@ -79,6 +80,37 @@ func getMahasiswa(w http.ResponseWriter, r *http.Request) {
     }
  
     http.Error(w, "Tidak diijinkan", http.StatusNotFound)
+    return
+}
+
+func getSelectedMahasiswa(w http.ResponseWriter, r *http.Request) {
+    if r.Method == "GET" {
+ 
+        ctx, cancel := context.WithCancel(context.Background())
+        defer cancel()
+ 
+        var art models.Mahasiswa
+ 
+        id := r.URL.Query().Get("id")
+ 
+        if id == "" {
+            utils.ResponseJSON(w, "id tidak boleh kosong", http.StatusBadRequest)
+            return
+        }
+        art.Id, _ = strconv.Atoi(id)
+ 
+        articles, err := mahasiswa.Detail(ctx, art)
+ 
+        if err != nil {
+            fmt.Println(err)
+        }
+ 
+        utils.ResponseJSON(w, articles, http.StatusOK)
+        return
+ 
+    }
+ 
+    http.Error(w, "Tidak di ijinkan", http.StatusMethodNotAllowed)
     return
 }
 

@@ -3,8 +3,8 @@ package mahasiswa
 import (
     "context"
     "fmt"
-    "belajar-golang/mahasiswa/backend/kodingincom/restapi/config"
-    "belajar-golang/mahasiswa/backend/kodingincom/restapi/models"
+    "belajar-golang/mahasiswa/backend/config"
+    "belajar-golang/mahasiswa/backend/models"
     "log"
     "errors"
     "database/sql"
@@ -41,6 +41,41 @@ func GetAll(ctx context.Context) ([]models.Mahasiswa, error) {
 			err != nil && sql.ErrNoRows != nil{
             return nil, err
         } 
+        mahasiswas = append(mahasiswas, mahasiswa)
+    }
+ 
+    return mahasiswas, nil
+}
+
+func Detail(ctx context.Context, mhs models.Mahasiswa) ([]models.Mahasiswa, error){
+    
+    var mahasiswas []models.Mahasiswa
+ 
+    db, err := config.Mysql()
+    
+    if err != nil {
+        log.Fatal("Gagal terhubung dengan MySQL lur..", err)
+    }
+    
+    queryText := fmt.Sprintf("SELECT * FROM %v WHERE id = '%d'", table, mhs.Id)
+ 
+    rowQuery, err := db.QueryContext(ctx, queryText)
+    
+    if err != nil {
+        log.Fatal(err)
+    }
+    
+    for rowQuery.Next() {
+        var mahasiswa models.Mahasiswa
+
+        if err = rowQuery.Scan(
+            &mahasiswa.Id,
+            &mahasiswa.Nama,
+            &mahasiswa.Nim,
+            &mahasiswa.Email);
+            err != nil && sql.ErrNoRows != nil {
+            return nil, err
+        }
         mahasiswas = append(mahasiswas, mahasiswa)
     }
  

@@ -3,8 +3,8 @@ package article
 import (
     "context"
     "fmt"
-    "belajar-golang/NewsAPI/backend/web/config"
-    "belajar-golang/NewsAPI/backend/web/models"
+    "belajar-golang/NewsAPI/backend/config"
+    "belajar-golang/NewsAPI/backend/models"
     "log"
     //"errors"
     "database/sql"

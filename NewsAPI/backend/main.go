@@ -12,9 +12,9 @@ import (
 	//"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/handlers"
-	"belajar-golang/NewsAPI/backend/web/controller"
-	"belajar-golang/NewsAPI/backend/web/models"
-	"belajar-golang/NewsAPI/backend/web/utils"
+	"belajar-golang/NewsAPI/backend/controller"
+	"belajar-golang/NewsAPI/backend/models"
+	"belajar-golang/NewsAPI/backend/utils"
 )
 
 func main() {

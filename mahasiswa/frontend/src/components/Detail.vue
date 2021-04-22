@@ -22,13 +22,15 @@ export default {
   },
   methods: {
     det(){
-      axios.get(`http://localhost:8090/detail/${this.$route.params.id}`).then(res =>{
+      axios.get(`http://localhost:8090/detail?id=${this.$route.params.id}`)
+      .then(res =>{
         //console.log(res.data.Data)
-          this.users = res.data.Data //respon dari rest api dimasukan ke users
+          this.users = res.data //respon dari rest api dimasukan ke users
+          console.log(this.users)
         }).catch ((err) => {
         console.log(err)
       })
-    },
+    }
   }
 }
 </script>
