@@ -16,13 +16,13 @@ func ProductResolve(param graphql.ResolveParams) (interface{}, error){
 		panic(err.Error())
 	}
 	b = b[:0]
-	result, err := db.Query("SELECT id, product_name, qte_stock, ifnull(product_gambar,'') FROM Products")
+	result, err := db.Query("SELECT id, price, product_name, qte_stock, ifnull(product_gambar,'') FROM products")
 	if err != nil{
 		panic(err.Error())
 	}
 
 	for result.Next(){
-		err = result.Scan(&a.ID, &a.ProductName, &a.QteStock, &a.ProductGambar)
+		err = result.Scan(&a.ID, &a.Price, &a.ProductName, &a.QteStock, &a.ProductGambar)
 		if err != nil{
 			panic(err.Error())
 		}
